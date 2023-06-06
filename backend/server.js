@@ -1,10 +1,8 @@
 require('dotenv').config()
 
-// initialisation express
-const express = require('express')
-
-// Importe les routes de reservations
-const reservationRoutes = require('./routes/reservations')
+const express = require('express') // initialisation express
+const mongoose = require('mongoose') // DB
+const reservationRoutes = require('./routes/reservations') // Importe les routes de reservations
 
 // express app
 const app = express()
@@ -22,7 +20,15 @@ app.use((req, res, next) => {
 // routes
 app.use('/api/reservations', reservationRoutes)
 
-// Ecoute du port
-app.listen(process.env.PORT, () => {
-    console.log('listening on port ', process.env.PORT)
-})
+// connection DB
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        // Ecoute du port
+        app.listen(process.env.PORT, () => {
+            console.log('connected to db & listening on port', process.env.PORT)
+        })
+    })
+    .catch((err) => {
+        console.log(err)
+    });
+
