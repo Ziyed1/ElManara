@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { NotificationContext } from '../context/notificationContext';
 import { Container, Typography, TextField, Button, Grid, Paper } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 
 const LoginForm = () => {
-  const [notification, setNotification] = useState(NotificationContext);
-
-  setTimeout(() => {
-    setNotification(null);
-  }, 3000);
-
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -71,10 +64,6 @@ const LoginForm = () => {
           </Grid>
         </Grid>
       </Paper>
-      {/* Notification */}
-      <div className={`notification ${notification ? 'show' : ''}`}>
-                Inscription valildée, connectez vous !
-      </div>
     </Container>
   );
 };

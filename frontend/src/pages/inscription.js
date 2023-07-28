@@ -41,7 +41,11 @@ const LoginForm = () => {
       setRole('');
 
       setNotification("Produit ajouté au panier");
-      navigate('/connexion')
+      setTimeout(() => {
+        setNotification(null);
+        navigate('/connexion')
+      }, 2000);
+      
     
     } catch (error) {
       console.error(error);
@@ -120,6 +124,10 @@ const LoginForm = () => {
           </Grid>
         </Grid>
       </Paper>
+       {/* Notification */}
+       <div className={`notification ${notification ? 'show' : ''}`}>
+                Inscription valildée, connectez vous !
+      </div>
     </Container>
   );
 };
