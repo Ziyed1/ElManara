@@ -4,20 +4,21 @@ import axios from 'axios'
 import { Container, Typography, TextField, Button, Grid, Paper, FormControlLabel, Checkbox } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 
+
 const LoginForm = () => {
+  const [notification, setNotification] = useState(null);
   const [firstName, setFirstname] = useState('');
   const [lastName,  setLastname] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('')
+  const [role, setRole] = useState(false)
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => { 
 
     e.preventDefault()
-
 
     const newUser = {
       firstName: firstName,
@@ -27,8 +28,6 @@ const LoginForm = () => {
       phone: phone,
       role: role
     };
-
-    
 
     try {
       const response = await axios.post('http://localhost:4000/api/inscription', newUser);
@@ -41,12 +40,12 @@ const LoginForm = () => {
       setPassword('');
       setRole('');
 
+      setNotification("Produit ajouté au panier");
       navigate('/connexion')
-
+    
     } catch (error) {
       console.error(error);
     }
-    
   }
 
   return (
