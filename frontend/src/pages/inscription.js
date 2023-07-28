@@ -1,52 +1,76 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Typography, TextField, Button, Grid, Paper } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'
+import { Container, Typography, TextField, Button, Grid, Paper, FormControlLabel, Checkbox } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 
 const LoginForm = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
+  const [firstName, setFirstname] = useState('');
+  const [lastName,  setLastname] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('')
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Add your login logic here
-    console.log(formData);
-  };
+  const handleSubmit = async (e) => { 
+
+    e.preventDefault()
+
+
+    const newUser = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+      phone: phone,
+      role: role
+    };
+
+    
+
+    try {
+      const response = await axios.post('http://localhost:4000/api/inscription', newUser);
+      console.log(response.data);
+      
+      setFirstname('');
+      setLastname('');
+      setPhone('');
+      setEmail('');
+      setPassword('');
+      setRole('');
+
+      navigate('/connexion')
+
+    } catch (error) {
+      console.error(error);
+    }
+    
+  }
 
   return (
     <Container maxWidth="xs">
       <Paper elevation={3} sx={{ p: 4, mt: 8 }}>
         <LockIcon sx={{ fontSize: 48, mb: 2 }} />
-        <Typography variant="h5" align="center" gutterBottom>
+        <Typography  variant="h5" align="center" gutterBottom>
           Inscription
         </Typography>
         <form onSubmit={handleSubmit}>
-        <TextField
+          <TextField
             fullWidth
             margin="normal"
             label="Prénom"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
+            name="firstName"
+            onChange={(e) => setFirstname(e.target.value)}
             variant="outlined"
           />
           <TextField
             fullWidth
             margin="normal"
             label="Nom"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
+            name="lastName"
+            onChange={(e) => setLastname(e.target.value)}
             variant="outlined"
           />
           <TextField
@@ -54,8 +78,7 @@ const LoginForm = () => {
             margin="normal"
             label="Email"
             name="email"
-            value={formData.email}
-            onChange={handleChange}
+            onChange={(e) => setEmail(e.target.value)}
             variant="outlined"
           />
           <TextField
@@ -63,8 +86,7 @@ const LoginForm = () => {
             margin="normal"
             label="Téléphone"
             name="phone"
-            value={formData.email}
-            onChange={handleChange}
+            onChange={(e) => setPhone(e.target.value)}
             variant="outlined"
           />
           <TextField
@@ -73,16 +95,24 @@ const LoginForm = () => {
             label="Password"
             name="password"
             type="password"
-            value={formData.password}
-            onChange={handleChange}
+            onChange={(e) => setPassword(e.target.value)}
             variant="outlined"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                onChange={(e) => setRole(e.target.checked)}
+                name="isAdmin"
+              />
+            }
+            label="Rôle Admin"
           />
           <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
             S'inscrire
           </Button>
         </form>
         <Grid container justifyContent="center" sx={{ mt: 2 }}>
-        <Grid item>
+          <Grid item>
             <Link to="/connexion" style={{ textDecoration: 'none' }}>
               <Button href="/connexion" variant="text" color="primary">
                 Revenir à la page de connexion
